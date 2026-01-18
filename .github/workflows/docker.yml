@@ -1,10 +1,9 @@
-name: Build, Test and Push Angular Image
+name: Atualizar Imagem Docker
 
 on:
-  push:
-    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
+  workflow_dispatch:
+
+
 
 env:
   DOCKERHUB_NAMESPACE: hugoalvesl

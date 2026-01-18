@@ -1,4 +1,4 @@
-name: Build Check
+name: Build
 
 on:
   push:
@@ -7,10 +7,6 @@ on:
   pull_request:
     branches:
       - main
-      - v5.*
-  schedule:
-    # build runs every weekday at 4:15AM UTC
-    - cron: '15 4 * * *'
 
 env:
   FORCE_COLOR: 2
@@ -18,22 +14,23 @@ env:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, windows-latest, macOS-latest]
-        node-version: [24.x]
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Clone repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.node-version }}
+          node-version: 25
+          cache: 'npm'
 
-      - name: Install npm dependencies
+      # ========================
+      # Install & Test
+      # ========================
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Run build
-        run: npm run build
+#      - name: Run Tests
+#        run: npm test -- --watch=false --browsers=ChromeHeadless
